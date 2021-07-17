@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_game"
+    tools:context=".presentation.activities.SlotsActivity">
+
+
+    <TextView
+        android:id="@+id/txt_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="271dp"
+        android:background="@drawable/bg_text"
+        android:padding="20dp"
+        android:text="Ваш счет : 1000"
+        android:textColor="@android:color/white" />
+
+    <FrameLayout
+        android:id="@+id/frame_bar"
+        android:layout_width="526dp"
+        android:layout_height="179dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/frame">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <com.example.slots.imageViewScroling.ImageViewScrolling
+                android:id="@+id/image1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.example.slots.imageViewScroling.ImageViewScrolling
+                android:id="@+id/image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.example.slots.imageViewScroling.ImageViewScrolling
+                android:id="@+id/image3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_down"
+        android:layout_width="219dp"
+        android:layout_height="58dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="231dp"
+        android:layout_marginEnd="233dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_btn"
+        android:text="Крутить"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</RelativeLayout>

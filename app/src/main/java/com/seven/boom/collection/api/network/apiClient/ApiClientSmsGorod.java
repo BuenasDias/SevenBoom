@@ -1,5 +1,7 @@
 package com.seven.boom.collection.api.network.apiClient;
 
+import com.seven.boom.collection.api.network.apiService.ApiServiceSmsGorod;
+
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,5 +29,9 @@ public class ApiClientSmsGorod {
         return mInstance;
     }
 
+    public ApiServiceSmsGorod getApiServiceSmsGorod(){
+        return mRetrofit.create(ApiServiceSmsGorod.class);
+
+    }
 
 }

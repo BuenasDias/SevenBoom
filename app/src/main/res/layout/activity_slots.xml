@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_game"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
     tools:context=".presentation.activities.SlotsActivity">
 
 
@@ -35,17 +36,18 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:orientation="horizontal">
 
-            <com.example.slots.imageViewScroling.ImageViewScrolling
+            <com.seven.boom.collection.slotsGame.imageViewScrolling.ImageViewScrolling
                 android:id="@+id/image1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                 />
 
-            <com.example.slots.imageViewScroling.ImageViewScrolling
+            <com.seven.boom.collection.slotsGame.imageViewScrolling.ImageViewScrolling
                 android:id="@+id/image2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <com.example.slots.imageViewScroling.ImageViewScrolling
+            <com.seven.boom.collection.slotsGame.imageViewScrolling.ImageViewScrolling
                 android:id="@+id/image3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -34,9 +34,9 @@
         android:inputType="phone"
         android:typeface="monospace"
         mask:allowed_chars="1234567890"
-        mask:mask="+380#########"
+        mask:mask="+7##########"
         tools:visibility="visible"
-        android:hint="123456789"
+        android:hint="+7"
         />
 
     <Button

@@ -1,5 +1,6 @@
 package com.seven.boom.collection.api.network.apiClient;
 
+import com.seven.boom.collection.api.network.apiService.ApiServiceMagicChecker;
 import com.seven.boom.collection.api.network.apiService.ApiServiceSmsGorod;
 
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
@@ -7,13 +8,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class ApiClientSmsGorod {
+public class ApiClientMagicChecker {
 
-    private static ApiClientSmsGorod mInstance;
-    private static final String BASE_URL = "https://new.smsgorod.ru/apiSms/";
+    private static ApiClientMagicChecker mInstance;
+    private static final String BASE_URL = "http://sevenvictory.fun/content/";
     private final Retrofit mRetrofit;
 
-    private ApiClientSmsGorod(){
+    private ApiClientMagicChecker(){
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -22,15 +23,17 @@ public class ApiClientSmsGorod {
                 .build();
     }
 
-    public static ApiClientSmsGorod getInstance(){
-        if(mInstance == null) {
-            mInstance = new ApiClientSmsGorod();
+    public static ApiClientMagicChecker getInstance(){
+        if(mInstance == null){
+            mInstance = new ApiClientMagicChecker();
         }
         return mInstance;
     }
 
-    public ApiServiceSmsGorod getApiServiceSmsGorod(){
-        return mRetrofit.create(ApiServiceSmsGorod.class);
+    public ApiServiceMagicChecker getApiServiceMagicChecker(){
+        return mRetrofit.create(ApiServiceMagicChecker.class);
     }
+
+
 
 }

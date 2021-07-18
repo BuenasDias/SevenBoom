@@ -46,10 +46,10 @@ public class AuthActivity extends AppCompatActivity {
 
         mBinding.btnAuthorization.setOnClickListener(view -> {
 
-            if(mBinding.userPhone.getRawText().length() == 9){
+            if(mBinding.userPhone.getRawText().length() == 10){
 
-                String phone = "380" + mBinding.userPhone.getRawText();
-                Log.d("TAG", "380" + mBinding.userPhone.getRawText());
+                String phone = "7" + mBinding.userPhone.getRawText();
+                Log.d("TAG", "7" + mBinding.userPhone.getRawText());
 
                 ApiClientSmsGorod.getInstance()
                         .getApiServiceSmsGorod()

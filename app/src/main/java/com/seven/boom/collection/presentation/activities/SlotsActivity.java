@@ -3,6 +3,7 @@ package com.seven.boom.collection.presentation.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,9 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
     TextView txt_score;
 
     int count_done = 0;
+    public int klo;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,53 +43,106 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
         initView();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        Intent intent = getIntent();
+        klo = intent.getIntExtra("klo", 0);
+
+
+        Log.d("TAG", "OnCreate SlotsActivity. klo = " + klo);
 
         image1.setEventEnd(this);
         image2.setEventEnd(this);
         image3.setEventEnd(this);
 
-        btn_down.setOnClickListener(v -> {
+        if (klo == 1) {
 
-            btn_down.setEnabled(false);
-            btn_down.setClickable(false);
+            // тут реализация игры для реального пользователя
 
-            Completable.timer(2000, TimeUnit.MILLISECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DisposableCompletableObserver() {
-                        @Override
-                        public void onComplete() {
-                            btn_down.setEnabled(true);
-                            btn_down.setClickable(true);
-                            Log.d("TAG", "Кнопка доступна");
-                        }
+            btn_down.setOnClickListener(v -> {
 
-                        @Override
-                        public void onError(@NotNull Throwable e) {
-                            e.printStackTrace();
-                        }
-                    });
+                btn_down.setEnabled(false);
+                btn_down.setClickable(false);
 
-            if(Common.SCORE >= 50){
+                Completable.timer(2000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DisposableCompletableObserver() {
+                            @Override
+                            public void onComplete() {
+                                btn_down.setEnabled(true);
+                                btn_down.setClickable(true);
+                                Log.d("TAG", "Кнопка доступна");
+                            }
 
-                // Вот тут нужно выбрать конкретную картинку
-                image1.setValueRandom(new Random().nextInt(6),
-                        new Random().nextInt((8 - 5) + 1) + 5);
+                            @Override
+                            public void onError(@NotNull Throwable e) {
+                                e.printStackTrace();
+                            }
+                        });
 
-                image2.setValueRandom(new Random().nextInt(6),
-                        new Random().nextInt((8 - 5) + 1) + 5);
+                if (Common.SCORE >= 50) {
 
-                image3.setValueRandom(new Random().nextInt(6),
-                        new Random().nextInt((8 - 5) + 1) + 5);
+                    // Вот тут нужно выбрать конкретную картинку
+                    image1.setValueRandom(4,
+                            new Random().nextInt((8 - 5) + 1) + 5);
 
-                Common.SCORE -= 50;
+                    image2.setValueRandom(4,
+                            new Random().nextInt((8 - 5) + 1) + 5);
 
-                txt_score.setText("Ваш счет : " + Common.SCORE);
+                    image3.setValueRandom(4,
+                            new Random().nextInt((8 - 5) + 1) + 5);
 
-            }else {
-                Toast.makeText(this, "You not enough money", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    Common.SCORE -= 50;
+
+                    txt_score.setText("Ваш счет : " + Common.SCORE);
+
+                } else {
+                    Toast.makeText(this, "You not enough money", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            btn_down.setOnClickListener(v -> {
+
+                btn_down.setEnabled(false);
+                btn_down.setClickable(false);
+
+                Completable.timer(2000, TimeUnit.MILLISECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DisposableCompletableObserver() {
+                            @Override
+                            public void onComplete() {
+                                btn_down.setEnabled(true);
+                                btn_down.setClickable(true);
+                                Log.d("TAG", "Кнопка доступна");
+                            }
+
+                            @Override
+                            public void onError(@NotNull Throwable e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+                if (Common.SCORE >= 50) {
+
+                    // Вот тут нужно выбрать конкретную картинку
+                    image1.setValueRandom(new Random().nextInt(6),
+                            new Random().nextInt((8 - 5) + 1) + 5);
+
+                    image2.setValueRandom(new Random().nextInt(6),
+                            new Random().nextInt((8 - 5) + 1) + 5);
+
+                    image3.setValueRandom(new Random().nextInt(6),
+                            new Random().nextInt((8 - 5) + 1) + 5);
+
+                    Common.SCORE -= 50;
+
+                    txt_score.setText("Ваш счет : " + Common.SCORE);
+
+                } else {
+                    Toast.makeText(this, "You not enough money", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void initView() {
@@ -101,20 +157,42 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
     @Override
     public void eventEnd(int result, int count) {
 
-        if(count_done < 2){
-            count_done++;
-        }else {
+        Log.d("TAG", "eventEnd. klo = " + klo);
 
-            count_done = 0;
+        if(klo == 1){
 
-            if(image1.getValue() == image2.getValue() && image2.getValue() == image3.getValue()){
+            if (count_done < 2) {
+                count_done++;
+            } else {
 
-                Toast.makeText(this, "You win big prize", Toast.LENGTH_SHORT).show();
-                Common.SCORE += 1000000;
+                count_done = 0;
 
-                txt_score.setText("Ваш счет : " + Common.SCORE);
+                if (image1.getValue() == image2.getValue() && image2.getValue() == image3.getValue()) {
+
+                    Toast.makeText(this, "You win big prize", Toast.LENGTH_SHORT).show();
+                    Common.SCORE += 1000000;
+
+                    txt_score.setText("Ваш счет : " + Common.SCORE);
+                }
             }
 
+        }else {
+
+            if (count_done < 2) {
+                count_done++;
+            } else {
+
+                count_done = 0;
+
+                if (image1.getValue() == image2.getValue() && image2.getValue() == image3.getValue()) {
+
+                    Toast.makeText(this, "You win big prize", Toast.LENGTH_SHORT).show();
+                    Common.SCORE += 10000;
+
+                    txt_score.setText("Ваш счет : " + Common.SCORE);
+                }
+            }
         }
+
     }
 }

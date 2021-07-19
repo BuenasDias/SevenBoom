@@ -10,9 +10,9 @@
     <string name="btn_back">Вернуться назад</string>
 
     <string-array name="countries">
-        <item>ru</item>
-        <item>ua</item>
-        <item>kz</item>
+        <item>ru +7</item>
+        <item>ua +380</item>
+        <item>kz +7</item>
     </string-array>
 </resources>
 

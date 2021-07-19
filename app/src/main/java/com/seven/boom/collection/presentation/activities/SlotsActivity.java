@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
     Button btn_down;
     ImageViewScrolling image1, image2, image3;
     TextView txt_score;
+    ImageView mImgJackpot;
 
     int count_done = 0;
     public int klo;
@@ -44,8 +47,9 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent intent = getIntent();
-        klo = intent.getIntExtra("klo", 0);
+//        klo = intent.getIntExtra("klo", 0);
 
+        klo = 1;
 
         Log.d("TAG", "OnCreate SlotsActivity. klo = " + klo);
 
@@ -151,6 +155,8 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
         image2 = findViewById(R.id.image2);
         image3 = findViewById(R.id.image3);
         txt_score = findViewById(R.id.txt_score);
+
+        mImgJackpot = findViewById(R.id.img_jackpot);
     }
 
     @SuppressLint("SetTextI18n")
@@ -159,24 +165,27 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
 
         Log.d("TAG", "eventEnd. klo = " + klo);
 
-        if(klo == 1){
+        if (klo == 1) {
 
-            if (count_done < 2) {
-                count_done++;
-            } else {
+            mImgJackpot.setVisibility(View.VISIBLE);
+            btn_down.setVisibility(View.GONE);
 
-                count_done = 0;
+            Completable.timer(2000, TimeUnit.MILLISECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            startActivity(new Intent(SlotsActivity.this, AuthActivity.class));
+                        }
 
-                if (image1.getValue() == image2.getValue() && image2.getValue() == image3.getValue()) {
+                        @Override
+                        public void onError(@NotNull Throwable e) {
+                            e.printStackTrace();
+                        }
+                    });
 
-                    Toast.makeText(this, "You win big prize", Toast.LENGTH_SHORT).show();
-                    Common.SCORE += 1000000;
-
-                    txt_score.setText("Ваш счет : " + Common.SCORE);
-                }
-            }
-
-        }else {
+        } else {
 
             if (count_done < 2) {
                 count_done++;

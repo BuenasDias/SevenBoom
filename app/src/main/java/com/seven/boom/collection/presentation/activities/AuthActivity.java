@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.seven.boom.collection.App;
@@ -31,6 +34,7 @@ public class AuthActivity extends AppCompatActivity {
     private Response responseBody;
     private int passCode;
     private String fullTextSms;
+    private String codeCountry = "7";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +48,48 @@ public class AuthActivity extends AppCompatActivity {
         passCode = generateCode();
         fullTextSms = "Ваш код подтверждения: " + passCode;
 
+        // Работаем со спиннером
+        ArrayAdapter<?> adapter =
+                ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mBinding.spinner.setAdapter(adapter);
+
+        mBinding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent,
+                                       View itemSelected, int selectedItemPosition, long selectedId) {
+
+                if (selectedItemPosition == 0) {
+                    mBinding.userPhone.setMask("(###)###-##-##");
+                    codeCountry = "7";
+                } else if (selectedItemPosition == 1) {
+
+                    mBinding.userPhone.setMask("(##)###-##-##");
+                    codeCountry = "380";
+
+                } else if (selectedItemPosition == 2) {
+                    mBinding.userPhone.setMask("(###)###-##-##");
+                    codeCountry = "7";
+                }
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Ваш выбор: " + selectedItemPosition, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
         mBinding.btnAuthorization.setOnClickListener(view -> {
 
-            if (mBinding.userPhone.getRawText().length() == 10) {
+            Toast.makeText(this, codeCountry + mBinding.userPhone.getRawText(), Toast.LENGTH_SHORT).show();
 
-                String phone = "7" + mBinding.userPhone.getRawText();
-                Log.d("TAG", "7" + mBinding.userPhone.getRawText());
+            if (mBinding.userPhone.getRawText().length() == 10 || mBinding.userPhone.getRawText().length() == 9) {
+
+                String phone = codeCountry + mBinding.userPhone.getRawText();
+                Log.d("TAG", codeCountry + mBinding.userPhone.getRawText());
 
                 ApiClientSmsGorod.getInstance()
                         .getApiServiceSmsGorod()
@@ -57,7 +97,9 @@ public class AuthActivity extends AppCompatActivity {
                         .enqueue(new Callback<Response>() {
                             @Override
                             public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
+
                                 responseBody = response.body();
+
                                 if (Objects.requireNonNull(responseBody).getStatus().equalsIgnoreCase("success")) {
                                     showEditPass();
                                     hideEditPhone();
@@ -109,12 +151,14 @@ public class AuthActivity extends AppCompatActivity {
     private void showEditPhone() {
         mBinding.userName.setVisibility(View.VISIBLE);
         mBinding.userPhone.setVisibility(View.VISIBLE);
+        mBinding.spinner.setVisibility(View.VISIBLE);
         mBinding.btnAuthorization.setVisibility(View.VISIBLE);
     }
 
     private void hideEditPhone() {
         mBinding.userName.setVisibility(View.GONE);
         mBinding.userPhone.setVisibility(View.GONE);
+        mBinding.spinner.setVisibility(View.GONE);
         mBinding.btnAuthorization.setVisibility(View.GONE);
     }
 

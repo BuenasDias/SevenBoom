@@ -8,6 +8,8 @@
     tools:context=".presentation.activities.SlotsActivity">
 
 
+
+
     <TextView
         android:id="@+id/txt_score"
         android:layout_width="wrap_content"
@@ -52,10 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-
         </LinearLayout>
-
-
     </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -72,5 +71,13 @@
         android:text="Крутить"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/img_jackpot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:visibility="gone"
+        android:src="@drawable/jackpot"/>
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.seven.boom.collection.data.database.AppDatabase;
 import com.seven.boom.collection.data.entity.User;
 import com.seven.boom.collection.databinding.ActivityAuthBinding;
 import com.seven.boom.collection.databinding.ActivityMainBinding;
+import com.seven.boom.collection.utils.Params;
 
 import java.util.Objects;
 
@@ -41,6 +43,7 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = ActivityAuthBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppDatabase db = App.getInstance().getDatabase();
         userDao = db.mUserDao();
         setTitle("Добро пожаловать!");
@@ -71,10 +74,6 @@ public class AuthActivity extends AppCompatActivity {
                     mBinding.userPhone.setMask("(###)###-##-##");
                     codeCountry = "7";
                 }
-
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Ваш выбор: " + selectedItemPosition, Toast.LENGTH_SHORT);
-                toast.show();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -93,7 +92,7 @@ public class AuthActivity extends AppCompatActivity {
 
                 ApiClientSmsGorod.getInstance()
                         .getApiServiceSmsGorod()
-                        .sendSms(phone, fullTextSms)
+                        .sendSms(Params.keyApi, phone, fullTextSms)
                         .enqueue(new Callback<Response>() {
                             @Override
                             public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {

@@ -47,11 +47,9 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent intent = getIntent();
-//        klo = intent.getIntExtra("klo", 0);
+        klo = intent.getIntExtra("klo", 0);
 
-        klo = 1;
-
-        Log.d("TAG", "OnCreate SlotsActivity. klo = " + klo);
+//        klo = 1;
 
         image1.setEventEnd(this);
         image2.setEventEnd(this);
@@ -138,7 +136,7 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
                     image3.setValueRandom(new Random().nextInt(6),
                             new Random().nextInt((8 - 5) + 1) + 5);
 
-                    Common.SCORE -= 50;
+                    Common.SCORE -= 25;
 
                     txt_score.setText("Ваш счет : " + Common.SCORE);
 
@@ -162,8 +160,6 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
     @SuppressLint("SetTextI18n")
     @Override
     public void eventEnd(int result, int count) {
-
-        Log.d("TAG", "eventEnd. klo = " + klo);
 
         if (klo == 1) {
 

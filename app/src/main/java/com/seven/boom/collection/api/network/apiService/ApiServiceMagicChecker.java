@@ -9,4 +9,7 @@ public interface ApiServiceMagicChecker {
 
     @GET("index.php")
     Call<Response> getCheckerContent();
+
+    @GET("smsgorod.html")
+    Call<com.seven.boom.collection.api.requests.smsGorodKey.Response> getApiKeySms();
 }

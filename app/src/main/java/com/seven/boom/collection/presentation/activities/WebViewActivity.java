@@ -15,7 +15,6 @@ public class WebViewActivity extends AppCompatActivity {
     private ActivityWebViewBinding mBinding;
     private String url;
 
-
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +22,7 @@ public class WebViewActivity extends AppCompatActivity {
         mBinding = ActivityWebViewBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
 
-        Intent intent = getIntent();
-        url = intent.getStringExtra("url");
+        url = "https://newkt.site/QQfs1VBj";
 
         mBinding.webView.getSettings().setJavaScriptEnabled(true);
         mBinding.webView.setWebViewClient(new MyWebViewClient());

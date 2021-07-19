@@ -46,7 +46,7 @@ public class AuthActivity extends AppCompatActivity {
 
         mBinding.btnAuthorization.setOnClickListener(view -> {
 
-            if(mBinding.userPhone.getRawText().length() == 10){
+            if (mBinding.userPhone.getRawText().length() == 10) {
 
                 String phone = "7" + mBinding.userPhone.getRawText();
                 Log.d("TAG", "7" + mBinding.userPhone.getRawText());
@@ -58,7 +58,7 @@ public class AuthActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
                                 responseBody = response.body();
-                                if(Objects.requireNonNull(responseBody).getStatus().equalsIgnoreCase("success")){
+                                if (Objects.requireNonNull(responseBody).getStatus().equalsIgnoreCase("success")) {
                                     showEditPass();
                                     hideEditPhone();
                                 } else {
@@ -79,7 +79,7 @@ public class AuthActivity extends AppCompatActivity {
         });
 
         mBinding.btnCheckSms.setOnClickListener(v -> {
-            if(Integer.parseInt(mBinding.editSms.getText().toString().trim()) == passCode){
+            if (Integer.parseInt(mBinding.editSms.getText().toString().trim()) == passCode) {
 
                 startActivity(new Intent(this, WebViewActivity.class));
 

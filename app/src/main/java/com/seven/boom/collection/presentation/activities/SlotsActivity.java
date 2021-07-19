@@ -47,7 +47,8 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent intent = getIntent();
-        klo = intent.getIntExtra("klo", 0);
+        klo = intent.getIntExtra("cloaka", 0);
+        Log.d("TAG", "slots " + klo);
 
 //        klo = 1;
 

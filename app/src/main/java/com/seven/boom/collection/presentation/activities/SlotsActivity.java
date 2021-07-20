@@ -199,6 +199,5 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
                 }
             }
         }
-
     }
 }

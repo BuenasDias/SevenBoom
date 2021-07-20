@@ -1,6 +1,5 @@
 package com.seven.boom.collection.api.network.apiClient;
 
-
 import android.content.Context;
 
 import com.danielceinos.cooper.CooperInterceptor;
@@ -44,22 +43,6 @@ public class ApiClientMagicChecker  {
     private ApiClientMagicChecker(Context context){
 
         mContext = context.getApplicationContext();
-
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.getLevel(HttpLoggingInterceptor.Level.BODY);
-
-//        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//
-//        httpClient.addInterceptor(chain -> {
-//            Request original = chain.request();
-//
-//            Request request = original.newBuilder()
-//                    .header("User-Agent", Params.USER_AGENT)
-//                    .method(original.method(), original.body())
-//                    .build();
-//
-//            return chain.proceed(request);
-//        });
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new UserAgentInterceptor(System.getProperty("http.agent")));

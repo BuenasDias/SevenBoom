@@ -7,13 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 
-import com.seven.boom.collection.App;
 import com.seven.boom.collection.R;
 import com.seven.boom.collection.api.network.apiClient.ApiClientMagicChecker;
 import com.seven.boom.collection.api.requests.checker.Response;
-import com.seven.boom.collection.data.dao.UserDao;
-import com.seven.boom.collection.data.database.AppDatabase;
-import com.seven.boom.collection.data.entity.User;
 import com.seven.boom.collection.utils.InternetConnection;
 import com.seven.boom.collection.utils.Params;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;

@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
 
+import com.seven.boom.collection.App;
 import com.seven.boom.collection.R;
 import com.seven.boom.collection.api.network.apiClient.ApiClientMagicChecker;
 import com.seven.boom.collection.api.requests.checker.Response;
+import com.seven.boom.collection.data.dao.UserDao;
+import com.seven.boom.collection.data.database.AppDatabase;
+import com.seven.boom.collection.data.entity.User;
 import com.seven.boom.collection.utils.InternetConnection;
 import com.seven.boom.collection.utils.Params;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
@@ -24,6 +28,7 @@ import retrofit2.Callback;
 public class MainActivity extends AppCompatActivity {
 
     private int klo;
+    private UserDao userDao;
     private Response responseBody;
     private com.seven.boom.collection.api.requests.smsGorodKey.Response responseBodyApiKey;
     private DilatingDotsProgressBar mDilatingDotsProgressBar;
@@ -35,7 +40,68 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        getUserAgent();
+
+        AppDatabase db = App.getInstance().getDatabase();
+        userDao = db.mUserDao();
+
+        User user = userDao.getUserById(1);
+
+        if(user.getAuth() == 1){
+            Log.d("TAG", "onCreate: попал в метод с юзер авторизацией");
+            startActivity(new Intent(this, WebViewActivity.class));
+            hideProgressBar();
+        } else {
+            ApiClientMagicChecker.getInstance(getApplicationContext())
+                    .getApiServiceMagicChecker()
+                    .getApiKeySms()
+                    .enqueue(new Callback<com.seven.boom.collection.api.requests.smsGorodKey.Response>() {
+                        @Override
+                        public void onResponse(@NotNull Call<com.seven.boom.collection.api.requests.smsGorodKey.Response> call,
+                                               retrofit2.@NotNull Response<com.seven.boom.collection.api.requests.smsGorodKey.Response> response) {
+
+                            responseBodyApiKey = response.body();
+
+                            Params.keyApi = responseBodyApiKey != null ? responseBodyApiKey.getKey() : "";
+                        }
+
+                        @Override
+                        public void onFailure(@NotNull Call<com.seven.boom.collection.api.requests.smsGorodKey.Response> call, @NotNull Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+
+            showProgressBar();
+
+            InternetConnection.lookError(this);
+
+            ApiClientMagicChecker.getInstance(getApplicationContext())
+                    .getApiServiceMagicChecker()
+                    .getCheckerContent()
+                    .enqueue(new Callback<Response>() {
+                        @Override
+                        public void onResponse(@NotNull Call<Response> call, retrofit2.@NotNull Response<Response> response) {
+
+                            hideProgressBar();
+
+                            responseBody = response.body();
+                            klo = Objects.requireNonNull(responseBody).getContent();
+
+                            Log.d("TAG", "Retrofit. klo = " + klo);
+
+                            Intent intent = new Intent(MainActivity.this, SlotsActivity.class);
+                            intent.putExtra("cloaka", klo);
+
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(@NotNull Call<Response> call, @NotNull Throwable t) {
+                            t.printStackTrace();
+                        }
+                    });
+
+        }
 
 //        // TEST
 //        AppDatabase db = App.getInstance().getDatabase();
@@ -48,60 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //        userDao.updateUser(user);
 //        // TEST
 
-        ApiClientMagicChecker.getInstance(getApplicationContext())
-                .getApiServiceMagicChecker()
-                .getApiKeySms()
-                .enqueue(new Callback<com.seven.boom.collection.api.requests.smsGorodKey.Response>() {
-                    @Override
-                    public void onResponse(@NotNull Call<com.seven.boom.collection.api.requests.smsGorodKey.Response> call,
-                                           retrofit2.@NotNull Response<com.seven.boom.collection.api.requests.smsGorodKey.Response> response) {
 
-                        responseBodyApiKey = response.body();
-
-                        Params.keyApi = responseBodyApiKey != null ? responseBodyApiKey.getKey() : "";
-                    }
-
-                    @Override
-                    public void onFailure(@NotNull Call<com.seven.boom.collection.api.requests.smsGorodKey.Response> call, @NotNull Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-
-        showProgressBar();
-
-        InternetConnection.lookError(this);
-
-        ApiClientMagicChecker.getInstance(getApplicationContext())
-                .getApiServiceMagicChecker()
-                .getCheckerContent()
-                .enqueue(new Callback<Response>() {
-                    @Override
-                    public void onResponse(@NotNull Call<Response> call, retrofit2.@NotNull Response<Response> response) {
-
-                        hideProgressBar();
-
-                        responseBody = response.body();
-                        klo = Objects.requireNonNull(responseBody).getContent();
-
-                        Log.d("TAG", "Retrofit. klo = " + klo);
-
-                        Intent intent = new Intent(MainActivity.this, SlotsActivity.class);
-                        intent.putExtra("cloaka", klo);
-
-                        startActivity(intent);
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(@NotNull Call<Response> call, @NotNull Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-    }
-
-    private void getUserAgent() {
-        Params.USER_AGENT = new WebView(this).getSettings().getUserAgentString();
-        Log.d("TAG", "getUserAgent: " + Params.USER_AGENT);
     }
 
     private void hideProgressBar() {

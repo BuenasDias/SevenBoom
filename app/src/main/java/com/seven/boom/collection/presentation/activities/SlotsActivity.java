@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,9 @@ import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.FullscreenPromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class SlotsActivity extends AppCompatActivity implements IEventEnd {
 
@@ -38,6 +42,8 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
     int count_done = 0;
     public int klo;
 
+    MediaPlayer mp;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +51,16 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
         setContentView(R.layout.activity_slots);
         initView();
 
+        mp = MediaPlayer.create(this, R.raw.music);
+        mp.setLooping(true);
+        mp.start();
+
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Intent intent = getIntent();
         klo = intent.getIntExtra("cloaka", 0);
-        Log.d("TAG", "slots " + klo);
 
-//        klo = 1;
+        showBalansPromt(txt_score);
 
         image1.setEventEnd(this);
         image2.setEventEnd(this);
@@ -146,6 +156,40 @@ public class SlotsActivity extends AppCompatActivity implements IEventEnd {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mp.stop();
+    }
+
+    public void showBalansPromt(View view) {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Ваш баланс")
+                .setSecondaryText("Нажимайте кнопку крутить чтобы выигрывать и увеличивайте свой баланс")
+                .setPromptBackground(new FullscreenPromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
+                .setPromptStateChangeListener((prompt, state) -> {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                    {
+                        showButtonPromt(btn_down);
+                    } else if(state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                        showButtonPromt(btn_down);
+                    }
+                })
+                .show();
+    }
+
+    public void showButtonPromt(View view) {
+        new MaterialTapTargetPrompt.Builder(this)
+                .setTarget(view)
+                .setPrimaryText("Кнопка крутить")
+                .setSecondaryText("Каждое нажатие кнопки крутить стоит 25 очков из вашего баланса")
+                .setPromptBackground(new FullscreenPromptBackground())
+                .setPromptFocal(new RectanglePromptFocal())
+                .show();
     }
 
     private void initView() {

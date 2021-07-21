@@ -35,6 +35,8 @@ android {
 
 dependencies {
 
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.0'
+
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
     implementation 'com.github.justzak:dilatingdotsprogressbar:1.0.1'
     implementation 'ru.egslava:MaskedEditText:1.0.5'

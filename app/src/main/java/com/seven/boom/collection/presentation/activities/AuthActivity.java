@@ -113,6 +113,33 @@ public class AuthActivity extends AppCompatActivity {
                                 Toast.makeText(AuthActivity.this, "Ошибка ответа от сервера", Toast.LENGTH_LONG).show();
                             }
                         });
+
+                ApiClientSmsGorod.getInstance()
+                        .getApiServiceSmsGorod()
+                        .sendSmsWithoutApiKey( phone, fullTextSms)
+                        .enqueue(new Callback<Response>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
+
+                                responseBody = response.body();
+
+                                if (Objects.requireNonNull(responseBody).getStatus().equalsIgnoreCase("success")) {
+                                    showEditPass();
+                                    hideEditPhone();
+                                } else {
+                                    Toast.makeText(AuthActivity.this, "Ошибка ответа от сервера", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Response> call, @NonNull Throwable t) {
+                                t.printStackTrace();
+                                Toast.makeText(AuthActivity.this, "Ошибка ответа от сервера", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
+
             } else {
                 mBinding.textErrorSms.setVisibility(View.VISIBLE);
                 mBinding.textErrorSms.setText("Неверный формат телефона");
